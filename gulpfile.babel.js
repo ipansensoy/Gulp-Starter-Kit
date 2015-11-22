@@ -9,7 +9,7 @@ const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
 gulp.task('styles', () => {
-  return gulp.src('app/styles/*.scss')
+  return gulp.src('app/sass/*.scss')
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
     .pipe($.sass.sync({
@@ -19,8 +19,26 @@ gulp.task('styles', () => {
     }).on('error', $.sass.logError))
     .pipe($.autoprefixer({browsers: ['last 1 version']}))
     .pipe($.sourcemaps.write())
-    .pipe(gulp.dest('.tmp/styles'))
+    .pipe(gulp.dest('.tmp/css'))
     .pipe(reload({stream: true}));
+});
+
+gulp.task('uncss', function(){
+  return gulp.src('.tmp/css/main.css')
+        .pipe($.uncss({
+              html: ['app/*.html'],
+              ignore: [
+                        '.fa',
+                        /(#|\.)active(\-[a-zA-Z]+)?/,
+                        /(#|\.)current-menu-item(\-[a-zA-Z]+)?/,
+                        /(#|\.)selectboxit(\-[a-zA-Z]+)?/,
+                        /(#|\.)mfp(\-[a-zA-Z]+)?/,
+                        /(#|\.)slicknav(\-[a-zA-Z]+)?/,
+                        /(#|\.)store-legends(\-[a-zA-Z]+)?/,
+                        /(#|\.|:)-webkit(\-[a-zA-Z]+)?/,
+                      ]
+        }))
+        .pipe(gulp.dest('.tmp/css'));
 });
 
 function lint(files, options) {
@@ -38,10 +56,10 @@ const testLintOptions = {
   }
 };
 
-gulp.task('lint', lint('app/scripts/**/*.js'));
+gulp.task('lint', lint('app/js/**/*.js'));
 gulp.task('lint:test', lint('test/spec/**/*.js', testLintOptions));
 
-gulp.task('html', ['styles'], () => {
+gulp.task('html', ['styles', 'uncss'], () => {
   const assets = $.useref.assets({searchPath: ['.tmp', 'app', '.']});
 
   return gulp.src('app/*.html')
@@ -55,7 +73,7 @@ gulp.task('html', ['styles'], () => {
 });
 
 gulp.task('images', () => {
-  return gulp.src('app/images/**/*')
+  return gulp.src('app/img/**/*')
     .pipe($.if($.if.isFile, $.cache($.imagemin({
       progressive: true,
       interlaced: true,
@@ -67,7 +85,7 @@ gulp.task('images', () => {
       console.log(err);
       this.end();
     })))
-    .pipe(gulp.dest('dist/images'));
+    .pipe(gulp.dest('dist/img'));
 });
 
 gulp.task('fonts', () => {
@@ -78,6 +96,7 @@ gulp.task('fonts', () => {
     .pipe(gulp.dest('dist/fonts'));
 });
 
+// If there are extra files within the root of /app directory, copy it to the dist (i.e. favicons, etc)
 gulp.task('extras', () => {
   return gulp.src([
     'app/*.*',
@@ -103,12 +122,12 @@ gulp.task('serve', ['styles', 'fonts'], () => {
 
   gulp.watch([
     'app/*.html',
-    'app/scripts/**/*.js',
-    'app/images/**/*',
+    'app/js/**/*.js',
+    'app/img/**/*',
     '.tmp/fonts/**/*'
   ]).on('change', reload);
 
-  gulp.watch('app/styles/**/*.scss', ['styles']);
+  gulp.watch('app/sass/**/*.scss', ['styles']);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
 });
@@ -140,17 +159,19 @@ gulp.task('serve:test', () => {
   gulp.watch('test/spec/**/*.js', ['lint:test']);
 });
 
-// inject bower components
+// inject bower components upon update of bower.json file
 gulp.task('wiredep', () => {
-  gulp.src('app/styles/*.scss')
+
+  // This will inject sass files of vendors inside sass files (i.e. main.scss)
+  gulp.src('app/sass/*.scss')
     .pipe(wiredep({
       ignorePath: /^(\.\.\/)+/
     }))
-    .pipe(gulp.dest('app/styles'));
+    .pipe(gulp.dest('app/sass'));
 
   gulp.src('app/*.html')
     .pipe(wiredep({
-      exclude: ['bootstrap-sass'],
+      exclude: ['bootstrap-sass'], //'exclude' means not to include certain packages within the bower file
       ignorePath: /^(\.\.\/)*\.\./
     }))
     .pipe(gulp.dest('app'));
