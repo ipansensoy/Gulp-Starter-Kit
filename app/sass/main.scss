@@ -1,5 +1,7 @@
 $icon-font-path: '../fonts/';
 
+@import "sprites";
+
 // bower:scss
 @import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "bower_components/font-awesome/scss/font-awesome.scss";
@@ -67,6 +69,27 @@ body {
     margin-top: 28px;
   }
 }
+
+/* Sprites */
+.sprite {
+  display: inline-block;
+  vertical-align: top;
+
+  &.sprite-camera {
+    @include sprite($camera);
+  }
+
+  &.sprite-landscape {
+    @include sprite($landscape);
+  }
+
+  &.sprite-picture {
+    @include sprite($picture);
+  }
+
+}
+
+
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {

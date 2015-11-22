@@ -4,6 +4,8 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
 import {stream as wiredep} from 'wiredep';
+import spritesmith from 'gulp.spritesmith';
+import merge from 'merge-stream';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -35,7 +37,7 @@ gulp.task('uncss', function(){
                         /(#|\.)mfp(\-[a-zA-Z]+)?/,
                         /(#|\.)slicknav(\-[a-zA-Z]+)?/,
                         /(#|\.)store-legends(\-[a-zA-Z]+)?/,
-                        /(#|\.|:)-webkit(\-[a-zA-Z]+)?/,
+                        /(#|\.|:)-webkit(\-[a-zA-Z]+)?/, //This is used to ignore pseudo elements that use double semi-columns
                       ]
         }))
         .pipe(gulp.dest('.tmp/css'));
@@ -88,8 +90,25 @@ gulp.task('images', () => {
     .pipe(gulp.dest('dist/img'));
 });
 
+
+gulp.task('sprites', function() {
+    var globalSprites = gulp.src('app/img/sprites/*.png').pipe(spritesmith({
+            imgName: 'sprites.png',
+            cssName: '_sprites.scss',
+            imgPath: '../img/sprites.png'
+        })),
+        cssGlobal = globalSprites.css.pipe(gulp.dest('app/sass/')),
+        imgGlobal = globalSprites.img.pipe(gulp.dest('app/img/'));
+
+    return merge(cssGlobal, imgGlobal);
+
+});
+
+
 gulp.task('fonts', () => {
+  /*main-bower-files is a plugin that scans bower.json and returns an array of files defined in the "main" property of the package.json*/
   return gulp.src(require('main-bower-files')({
+    /*This is a filter to only return font files from bower packages (specifically bootstrap-sass & font-awesome) */
     filter: '**/*.{eot,svg,ttf,woff,woff2}'
   }).concat('app/fonts/**/*'))
     .pipe(gulp.dest('.tmp/fonts'))
@@ -162,13 +181,14 @@ gulp.task('serve:test', () => {
 // inject bower components upon update of bower.json file
 gulp.task('wiredep', () => {
 
-  // This will inject sass files of vendors inside sass files (i.e. main.scss)
+  // This will inject sass files of vendors(i.e. bootstrap or fontawesome) inside our main.scss files
   gulp.src('app/sass/*.scss')
     .pipe(wiredep({
       ignorePath: /^(\.\.\/)+/
     }))
     .pipe(gulp.dest('app/sass'));
 
+  // This will scan .html files and will inject vendor files in js & css blocks
   gulp.src('app/*.html')
     .pipe(wiredep({
       exclude: ['bootstrap-sass'], //'exclude' means not to include certain packages within the bower file
