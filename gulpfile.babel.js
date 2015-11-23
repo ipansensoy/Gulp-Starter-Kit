@@ -3,10 +3,10 @@ import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import browserSync from 'browser-sync';
 import del from 'del';
-import {stream as wiredep} from 'wiredep';
 import spritesmith from 'gulp.spritesmith';
 import merge from 'merge-stream';
 import fileInclude from 'gulp-file-include';
+import {stream as wiredep} from 'wiredep';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -194,7 +194,7 @@ gulp.task('serve:test', () => {
 gulp.task('wiredep', () => {
 
   // This will inject sass files of vendors(i.e. bootstrap or fontawesome) inside our main.scss files
-  gulp.src('app/sass/*.scss')
+  gulp.src('app/sass/main.scss')
     .pipe(wiredep({
       ignorePath: /^(\.\.\/)+/
     }))
