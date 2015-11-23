@@ -6,6 +6,7 @@ import del from 'del';
 import {stream as wiredep} from 'wiredep';
 import spritesmith from 'gulp.spritesmith';
 import merge from 'merge-stream';
+import fileInclude from 'gulp-file-include';
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -23,6 +24,15 @@ gulp.task('styles', () => {
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('.tmp/css'))
     .pipe(reload({stream: true}));
+});
+
+gulp.task('fileinclude', () => {
+  gulp.src('app/tpl/*.html')
+    .pipe(fileInclude({
+      prefix: '@@',
+      basepath: '@file'
+    }))
+    .pipe(gulp.dest('app/'));
 });
 
 gulp.task('uncss', function(){
@@ -145,6 +155,8 @@ gulp.task('serve', ['styles', 'fonts'], () => {
     'app/img/**/*',
     '.tmp/fonts/**/*'
   ]).on('change', reload);
+
+  gulp.watch('app/tpl/*.html', ['fileinclude']);
 
   gulp.watch('app/sass/**/*.scss', ['styles']);
   gulp.watch('app/fonts/**/*', ['fonts']);

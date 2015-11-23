@@ -10,9 +10,9 @@ $icon-font-path: '../fonts/';
 @import "bower_components/font-awesome/scss/font-awesome.scss";
 // endbower
 
-@import "header";
-@import "footer";
-@import "body";
+@import "global/header";
+@import "global/footer";
+@import "global/body";
 
 
 .browserupgrade {
