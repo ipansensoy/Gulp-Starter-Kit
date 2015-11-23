@@ -135,6 +135,12 @@ gulp.task('extras', () => {
   }).pipe(gulp.dest('dist'));
 });
 
+
+gulp.task('views', () => {
+  return gulp.src('app/views/**/*', { base: './app' })
+          .pipe(gulp.dest('dist'));
+});
+
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('serve', ['styles', 'fonts'], () => {
@@ -210,6 +216,11 @@ gulp.task('wiredep', () => {
 });
 
 gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
+  return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
+});
+
+
+gulp.task('build:angular', ['lint', 'html', 'images', 'fonts', 'extras', 'views'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 
