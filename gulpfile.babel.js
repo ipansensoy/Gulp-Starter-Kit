@@ -162,7 +162,7 @@ gulp.task('serve', ['styles', 'fonts'], () => {
     '.tmp/fonts/**/*'
   ]).on('change', reload);
 
-  gulp.watch('app/tpl/*.html', ['fileinclude']);
+  gulp.watch('app/tpl/**/*.html', ['fileinclude']);
 
   gulp.watch('app/sass/**/*.scss', ['styles']);
   gulp.watch('app/fonts/**/*', ['fonts']);
@@ -207,12 +207,12 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app/sass'));
 
   // This will scan .html files and will inject vendor files in js & css blocks
-  gulp.src('app/*.html')
+  gulp.src('app/tpl/global/*.html')
     .pipe(wiredep({
       exclude: ['bootstrap-sass'], //'exclude' means not to include certain packages within the bower file
       ignorePath: /^(\.\.\/)*\.\./
     }))
-    .pipe(gulp.dest('app'));
+    .pipe(gulp.dest('app/tpl/global'));
 });
 
 gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
