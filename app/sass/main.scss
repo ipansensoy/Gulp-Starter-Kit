@@ -1,18 +1,53 @@
 $icon-font-path: '../fonts/';
 
-@import "variables";
-@import "mixins";
-@import "sprites";
+/*----- VENDORS-------
+----------------------*/
 
-// bower:scss
-@import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
-@import "bower_components/font-awesome/scss/font-awesome.scss";
-// endbower
+    // bower:scss
+    @import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+    @import "bower_components/font-awesome/scss/font-awesome.scss";
+    // endbower
 
-@import "global/header";
-@import "global/footer";
-@import "global/body";
 
+
+/*----- FONTS-------
+----------------------*/
+@import "base/fonts";
+
+
+/*-----VARIABLES----
+-----------------------*/
+@import "base/variables";
+
+
+/*-----MIX-INS AND PLACEHOLDER -------
+-----------------------*/
+@import "base/mixins";
+@import "base/placeholders";
+
+
+/*-----SPRITES-------
+-----------------------*/
+@import "base/sprites";
+
+
+/*-----LAYOUTS-------
+-----------------------*/
+@import "layouts/header";
+@import "layouts/footer";
+@import "layouts/body";
+
+/*-----MODULES-------
+-----------------------*/
+
+
+/*-----GLOBALS--------
+--------------------------*/
+@import "base/globals";
+
+/*-----PAGES-------
+-----------------------*/
+@import "pages/home";
 
 .browserupgrade {
   margin: 0.2em 0;
