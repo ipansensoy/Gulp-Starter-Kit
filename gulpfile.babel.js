@@ -7,9 +7,22 @@ import spritesmith from 'gulp.spritesmith';
 import merge from 'merge-stream';
 import fileInclude from 'gulp-file-include';
 import {stream as wiredep} from 'wiredep';
-
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
+var header = require('gulp-header');
+var pkg = require('./package.json');
+var banner = [
+    '/*!\n' +
+    ' * <%= pkg.title %>\n' +
+    ' * <%= pkg.description %>\n' +
+    ' * <%= pkg.url %>\n' +
+    ' * @author <%= pkg.author %>\n' +
+    ' * @version <%= pkg.version %>\n' +
+    ' * Copyright ' + new Date().getFullYear() + '. <%= pkg.license %> licensed.\n' +
+    ' */',
+    '\n'
+].join('');
+
 
 gulp.task('styles', () => {
   return gulp.src('app/sass/*.scss')
@@ -21,10 +34,26 @@ gulp.task('styles', () => {
       includePaths: ['.']
     }).on('error', $.sass.logError))
     .pipe($.autoprefixer({browsers: ['last 1 version']}))
-    .pipe($.sourcemaps.write())
+     .pipe(header(banner, {
+        pkg: pkg
+    }))
+    .pipe($.sourcemaps.write('/'))
     .pipe(gulp.dest('.tmp/css'))
+
     .pipe(reload({stream: true}));
 });
+
+var banner = [
+    '/*!\n' +
+    ' * <%= pkg.title %>\n' +
+    ' * <%= pkg.description %>\n' +
+    ' * <%= pkg.url %>\n' +
+    ' * @author <%= pkg.author %>\n' +
+    ' * @version <%= pkg.version %>\n' +
+    ' * Copyright ' + new Date().getFullYear() + '. <%= pkg.license %> licensed.\n' +
+    ' */',
+    '\n'
+].join('');
 
 gulp.task('fileinclude', () => {
   gulp.src('app/tpl/*.html')
