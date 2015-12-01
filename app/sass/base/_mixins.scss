@@ -1,0 +1,221 @@
+@function angle($deg) {
+    @if type-of($deg) == "number" {
+        @return mod(abs($deg - 450), 360deg);
+    }
+    @else {
+        $position: to + " ";
+        @each $pos in $deg {
+            $position: $position + opposite-position($pos) + " ";
+        }
+        @return $position;
+    }
+}
+
+@function helper-gradient-angle($direction) {
+    $old-direction: $direction;
+    $veryold-direction: $direction;
+    // New Syntax has to be evaluated to old one
+    @if $direction == "to bottom" {
+        $old-direction: "top";
+    }
+    @else if $direction == "to right" {
+        $old-direction: "left";
+    }
+    @else if $direction == "to top" {
+        $old-direction: "bottom";
+    }
+    @else if $direction == "to left" {
+        $old-direction: "right";
+    }
+    @else {
+        $old-direction: angle($direction);
+    }
+    // And also for very old syntax
+    @if $direction == "to bottom" {
+        $veryold-direction: "left top, left bottom";
+    }
+    @else if $direction == "to right" {
+        $veryold-direction: "top left, bottom right";
+    }
+    @else if $direction == "to top" {
+        $veryold-direction: "left bottom, left top";
+    }
+    @else if $direction == "to left" {
+        $veryold-direction: "top right, bottom left";
+    }
+    @else {
+        $veryold-direction: angle($direction);
+    }
+    @return $old-direction, $veryold-direction;
+}
+
+/*
+*   @description
+*   Generates border radius for a given element
+*   @example
+*  .selector {
+*       @include border-radius(5px);
+*   }
+*/
+@mixin x-border-radius($radius: 5px) {
+    -moz-border-radius: $radius;
+    -webkit-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
+
+/*
+*   @description
+*   Generates opacity for a given element
+*   @example
+*  .selector {
+*       @include opacity(5px);
+*   }
+*/
+@mixin x-opacity($opacity: 0.5) {
+    filter: alpha(opacity = $opacity * 10);
+    /* internet explorer */
+    -khtml-opacity: $opacity;
+    /* khtml, old safari */
+    -moz-opacity: $opacity;
+    /* mozilla, netscape */
+    opacity: $opacity;
+    /* fx, safari, opera */
+}
+
+/*
+*   @description
+*   Generates box shadow for a given element
+*   @example
+*  .selector {
+*       @include box-shadow(5px 5px 10px 5px #aaa);
+*   }
+*/
+@mixin x-box-shadow($values) {
+    -moz-box-shadow: $values;
+    -webkit-box-shadow: $values;
+    box-shadow: $values;
+}
+
+/*
+*   @description
+*   Generates text shadow for a given element
+*   @example
+*  .selector {
+*       @include text-shadow(5px 5px 10px 5px #aaa);
+*   }
+*/
+@mixin x-text-shadow($values) {
+    text-shadow: $values;
+}
+
+/*
+ * @description
+ * Generates a linear gradient for a given element with a fallback color.
+ * @example
+ *   .selector {
+ *     @include linear-gradient("to bottom", #ccc, #ddd, #bbb);
+ *   }
+ */
+@mixin x-linear-gradient($direction: "to bottom", $fallback: #ccc, $from: #ccc, $to: #aaa) {
+    $directions: helper-gradient-angle($direction);
+    // Provide a fallback-color
+    background-color: $fallback;
+    // Cross-browser linear-gradients
+    background-image: -webkit-gradient(linear, unquote(nth($directions, 2)), from($from), to($to));
+    // Android 2.1-3.0
+    background-image: -webkit-linear-gradient(unquote(nth($directions, 1)), $from, $to);
+    background-image: linear-gradient(unquote($direction), $from, $to);
+}
+
+/*
+ * @description
+ * Generates `placeholder` content for a given element
+  * @example
+ *   .selector {
+ *     @include x-placeholder {
+ *         color: #bada55;
+ *         font-weight: bold;
+ *     }
+ *   }
+ */
+@mixin x-placeholder {
+    &::-webkit-input-placeholder {
+        @content;
+    }
+    &::-moz-placeholder {
+        @content;
+    }
+    &:-ms-input-placeholder {
+        @content;
+    }
+}
+
+/*
+ * @description
+ * Generates cross-browser-compatible `transform` for a given element
+ * @example
+ *   .selector {
+ *     @include x-transform(rotate(1deg));
+ *   }
+ */
+@mixin x-transform($values) {
+    -webkit-transform: $values;
+    // Chrome, Safari, iOS Safari, Android Stock
+    -ms-transform: $values;
+    // IE9
+    transform: $values;
+}
+
+/*
+ * @description
+ * Generates cross-browser-compatible `transition` output for a given element.
+ * @example
+ *   .selector {
+ *     @include x-transition(background 0.3s ease-in);
+ *   }
+ */
+@mixin x-transition($values) {
+    -webkit-transition: $values;
+    transition: $values;
+}
+
+@mixin x-vertical-align {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+/*
+ * @description
+ * Centers  a given element .
+ * @example
+ *   .selector {
+ *      @include center(true, false);
+ *   }
+ */
+
+@mixin centerer($horizontal: true, $vertical: true) {
+    position: absolute;
+    @if $horizontal and $vertical {
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+    @else if $horizontal {
+        left: 50%;
+        -webkit-transform: translate(-50%, 0);
+        -ms-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+    }
+    @else if $vertical {
+        top: 50%;
+        -webkit-transform: translate(0, -50%);
+        -ms-transform: translate(0, -50%);
+        transform: translate(0, -50%);
+    }
+}
