@@ -100,3 +100,4 @@ $ gulp serve:dist
 ###Build Release
 ```
 $ gulp build
+```
