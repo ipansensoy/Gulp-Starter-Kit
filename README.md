@@ -1,4 +1,4 @@
-﻿# Gulp Front-End Starter Kit
+# Gulp Front-End Starter Kit
 
 Frontend development on steroids
 
@@ -27,12 +27,14 @@ Using node best practices and maintaining a minimal API surface, your build work
 ### What can this do?
 
 
-* Sass
+
+* Compiling Sass
 * CSS and JS minification
 * Strip unused CSS with uncss
 * Image optimization
 * Multi device testing using browsersync
 * Install package via Bower
+
 
 
 
@@ -83,18 +85,32 @@ Go and play. If you're brand new to Sass we've set up some resources to help you
 $ npm install
 
 ```
+<<<<<<< HEAD
 ###Watch Sass/JS/Image
 ```
 $ gulp serve
+=======
+###Watch Compass/Sass/JS
+```
+$ gulp
+>>>>>>> 93807d12b1f88b821a2dda55a84249f9347c853c
 
 ```
 
 ###Serve Build
 ```
+<<<<<<< HEAD
 $ gulp serve:dist
+=======
+$ gulp serve-dist
+>>>>>>> 93807d12b1f88b821a2dda55a84249f9347c853c
 
 ```
 ###Build Release
 ```
+<<<<<<< HEAD
 $ gulp build
 
+=======
+$ gulp build
+>>>>>>> 93807d12b1f88b821a2dda55a84249f9347c853c
