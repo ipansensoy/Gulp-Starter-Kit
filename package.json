@@ -1,4 +1,12 @@
 {
+  "name": "nw-frontend-starter-kit",
+  "title":"NuWorks Front-End Starter Kit",
+  "description": "Performing repetitive tasks like minification, sass compilation,spritesheet creation, and linting javascript codes, making your job easier.",
+  "version": "0.1.0",
+  "author": "Ian Pansensoy, Michael Yap",
+  "copyright": "2015",
+  "license":"MIT",
+  "url":"http://nuworks.ph",
   "private": true,
   "engines": {
     "node": ">=0.12.0"
@@ -8,6 +16,7 @@
     "browser-sync": "^2.2.1",
     "del": "^1.1.1",
     "gulp": "^3.9.0",
+    "gulp-header":"latest",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-cache": "^0.2.8",
     "gulp-eslint": "^0.13.2",
