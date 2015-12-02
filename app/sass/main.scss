@@ -1,20 +1,6 @@
 $icon-font-path: '../fonts/';
 
-<<<<<<< HEAD
-@import "variables";
-@import "mixins";
-@import "sprites";
 
-// bower:scss
-@import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
-@import "bower_components/font-awesome/scss/font-awesome.scss";
-// endbower
-
-@import "global/header";
-@import "global/footer";
-@import "global/body";
-
-=======
 /*----- VENDORS-------
 ----------------------*/
 
@@ -61,7 +47,6 @@ $icon-font-path: '../fonts/';
 /*-----PAGES-------
 -----------------------*/
 @import "pages/home";
->>>>>>> 5bf207488ea027585c430fa61ad2236e7bb72627
 
 .browserupgrade {
   margin: 0.2em 0;
