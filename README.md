@@ -82,7 +82,7 @@ Go and play. If you're brand new to Sass we've set up some resources to help you
 
 ##Install Dev Dependencies
 ```
-$ npm install
+$ npm install && $bower install
 
 ```
 ###Watch Sass/JS/Image

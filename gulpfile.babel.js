@@ -70,7 +70,7 @@ gulp.task('fileinclude', () => {
 gulp.task('uncss', function() {
   return gulp.src('.tmp/css/main.css')
     .pipe($.uncss({
-      html: ['app/*.html'],
+      html: ['app/**/*.html'],
       ignore: [
         '.fa',
         /(#|\.)active(\-[a-zA-Z]+)?/,
@@ -111,7 +111,7 @@ gulp.task('html', ['styles', 'uncss'], () => {
     searchPath: ['.tmp', 'app', '.']
   });
 
-  return gulp.src('app/*.html')
+  return gulp.src('app/**/*.html')
     .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.minifyCss({
@@ -177,7 +177,7 @@ gulp.task('extras', () => {
 
 
 gulp.task('views', () => {
-  return gulp.src('app/views/**/*', {
+  return gulp.src('app/**/**/*.html', {
       base: './app'
     })
     .pipe(gulp.dest('dist'));
@@ -185,7 +185,7 @@ gulp.task('views', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('serve', ['styles', 'fonts'], () => {
+gulp.task('serve', ['styles', 'fonts','fileinclude'], () => {
   browserSync({
     notify: false,
     port: 9000,
@@ -198,14 +198,13 @@ gulp.task('serve', ['styles', 'fonts'], () => {
   });
 
   gulp.watch([
-    'app/*.html',
+    'app/**/*.html',
     'app/js/**/*.js',
     'app/img/**/*',
     '.tmp/fonts/**/*'
   ]).on('change', reload);
 
   gulp.watch('app/tpl/**/*.html', ['fileinclude']);
-
   gulp.watch('app/sass/**/*.scss', ['styles']);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
