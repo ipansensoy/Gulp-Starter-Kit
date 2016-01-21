@@ -70,7 +70,7 @@ gulp.task('fileinclude', () => {
 gulp.task('uncss', function() {
   return gulp.src('.tmp/css/main.css')
     .pipe($.uncss({
-      html: ['app/**/*.html'],
+      html: ['app/*.html'],
       ignore: [
         '.fa',
         /(#|\.)active(\-[a-zA-Z]+)?/,
@@ -111,7 +111,7 @@ gulp.task('html', ['styles', 'uncss'], () => {
     searchPath: ['.tmp', 'app', '.']
   });
 
-  return gulp.src('app/**/*.html')
+  return gulp.src('app/*.html')
     .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.minifyCss({
@@ -144,10 +144,10 @@ gulp.task('images', () => {
 gulp.task('sprites', function() {
   var globalSprites = gulp.src('app/img/sprites/*.png').pipe(spritesmith({
       imgName: 'sprites.png',
-      cssName: '_sprites.scss',
+      cssName: '_sprites.css',
       imgPath: '../img/sprites.png'
     })),
-    cssGlobal = globalSprites.css.pipe(gulp.dest('app/sass/')),
+    cssGlobal = globalSprites.css.pipe(gulp.dest('app/sass/base')),
     imgGlobal = globalSprites.img.pipe(gulp.dest('app/img/'));
 
   return merge(cssGlobal, imgGlobal);
@@ -169,6 +169,9 @@ gulp.task('fonts', () => {
 gulp.task('extras', () => {
   return gulp.src([
     'app/*.*',
+    'app/**/*',
+    '!app/sass{,/**} ',
+    '!app/tpl{,/**} ',
     '!app/*.html'
   ], {
     dot: true
@@ -177,7 +180,7 @@ gulp.task('extras', () => {
 
 
 gulp.task('views', () => {
-  return gulp.src('app/**/**/*.html', {
+  return gulp.src('app/views/**/*', {
       base: './app'
     })
     .pipe(gulp.dest('dist'));
@@ -185,7 +188,7 @@ gulp.task('views', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('serve', ['styles', 'fonts','fileinclude'], () => {
+gulp.task('serve', ['styles', 'fonts'], () => {
   browserSync({
     notify: false,
     port: 9000,
@@ -198,13 +201,14 @@ gulp.task('serve', ['styles', 'fonts','fileinclude'], () => {
   });
 
   gulp.watch([
-    'app/**/*.html',
+    'app/*.html',
     'app/js/**/*.js',
     'app/img/**/*',
     '.tmp/fonts/**/*'
   ]).on('change', reload);
 
   gulp.watch('app/tpl/**/*.html', ['fileinclude']);
+
   gulp.watch('app/sass/**/*.scss', ['styles']);
   gulp.watch('app/fonts/**/*', ['fonts']);
   gulp.watch('bower.json', ['wiredep', 'fonts']);
