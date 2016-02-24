@@ -15,7 +15,7 @@
     "babel-core": "^5.5.6",
     "browser-sync": "^2.2.1",
     "del": "^1.1.1",
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-header":"latest",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-cache": "^0.2.8",
